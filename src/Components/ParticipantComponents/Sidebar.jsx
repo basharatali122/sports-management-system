@@ -175,7 +175,7 @@ function SidebarContent({
 
       {/* Footer */}
       <div className="mt-auto pt-6 text-xs opacity-60 text-center">
-        <p>© {new Date().getFullYear()} DigitalArena</p>
+        <p>© {new Date().getFullYear()} VU-Sports-Society</p>
       </div>
     </>
   );

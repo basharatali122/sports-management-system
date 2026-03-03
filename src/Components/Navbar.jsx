@@ -70,10 +70,10 @@ function Navbar() {
           >
             <img
               src={img}
-              alt="DigitalArena Logo"
+              alt="VU-Sports-Society Logo"
               className="h-40 w-32 object-contain object-center align-middle"
             />
-            <span className="leading-none">DigitalArena</span>
+            <span className="leading-none">VU-Sports-Society</span>
           </Link>
 
           {/* Desktop Menu */}

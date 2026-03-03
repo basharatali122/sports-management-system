@@ -23,7 +23,7 @@ function Home() {
     {
       id: 1,
       img: MainBg,
-      title: "Welcome to DigitalArena",
+      title: "Welcome to VU-Sports-Society",
       subtitle:
         "Elevate your game. Join the ultimate university sports community where passion meets performance.",
     },
@@ -134,7 +134,7 @@ function Home() {
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
           <motion.img
             src={MainBg}
-            alt="About DigitalArena"
+            alt="About VU-Sports-Society"
             className="rounded-2xl shadow-lg w-full object-cover"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -146,10 +146,10 @@ function Home() {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black/80">
-              About <span className="text-green-500">DigitalArena</span>
+              About <span className="text-green-500">VU-Sports-Society</span>
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              DigitalArena connects athletes, coaches, and organizers through
+              VU-Sports-Society connects athletes, coaches, and organizers through
               one unified platform designed to inspire growth and recognition in
               university sports.
             </p>
@@ -273,7 +273,7 @@ function Home() {
               {
                 name: "Sarah Khan",
                 quote:
-                  "DigitalArena helped me find tournaments and teammates — it's a game-changer for university athletes!",
+                  "VU-Sports-Society helped me find tournaments and teammates — it's a game-changer for university athletes!",
               },
               {
                 name: "Ali Raza",
@@ -283,7 +283,7 @@ function Home() {
               {
                 name: "Hina Malik",
                 quote:
-                  "I built my dream team and gained recognition through DigitalArena. Truly inspiring!",
+                  "I built my dream team and gained recognition through VU-Sports-Society. Truly inspiring!",
               },
             ].map((t, i) => (
               <motion.div

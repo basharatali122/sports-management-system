@@ -77,7 +77,7 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div className="p-4 border-t border-gray-700/20 text-center text-xs text-gray-500">
-        <p className="opacity-80">© 2025 DigitalArena</p>
+        <p className="opacity-80">© 2025 VU-Sports-Society</p>
       </div>
 
       {/* Poppins Font Import */}

@@ -15,7 +15,7 @@ const Footer = () => {
           {/* --- Brand --- */}
           <div>
             <h2 className="text-3xl font-bold text-green-600 dark:text-green-500">
-              DigitalArena
+              VU-Sports-Society
             </h2>
             <p className="mt-3 text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-sm mx-auto md:mx-0">
               Elevating university sports.
