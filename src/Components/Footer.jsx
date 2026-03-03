@@ -25,7 +25,7 @@ const Footer = () => {
           {/* --- Social Icons --- */}
           <div className="flex justify-center md:justify-center space-x-6">
             <a
-              href="https://www.facebook.com/USTSportsSupportSociety"
+              href="https://www.facebook.com/VUSportsSupportSociety"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full bg-green-100 dark:bg-green-800/20 text-green-600 dark:text-green-400 
@@ -34,7 +34,7 @@ const Footer = () => {
               <Facebook size={20} />
             </a>
             <a
-              href="https://www.instagram.com/ust_sportssupportsociety/"
+              href="https://www.instagram.com/vu_sportssupportsociety/"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full bg-pink-100 dark:bg-pink-800/20 text-pink-500 dark:text-pink-400 
@@ -43,7 +43,7 @@ const Footer = () => {
               <Instagram size={20} />
             </a>
             <a
-              href="https://twitter.com/UST_SSS"
+              href="https://twitter.com/VU_SSS"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full bg-sky-100 dark:bg-sky-800/20 text-sky-500 dark:text-sky-400 
@@ -52,7 +52,7 @@ const Footer = () => {
               <Twitter size={20} />
             </a>
             <a
-              href="mailto:support@ustsports.edu"
+              href="mailto:support@vusports.edu"
               className="p-2 rounded-full bg-gray-100 dark:bg-gray-800/30 text-gray-600 dark:text-gray-400 
                          hover:bg-gray-700 hover:text-white transition-all duration-300"
             >
@@ -65,14 +65,14 @@ const Footer = () => {
             <p className="text-sm">
               © {currentYear}{" "}
               <span className="font-semibold text-green-600 dark:text-green-400">
-                UST Sports Support Society
+                VU Sports Support Society
               </span>
               . All rights reserved.
             </p>
             <p className="text-xs md:text-sm">
               Designed & Developed by{" "}
               <span className="text-green-500 dark:text-green-400 font-medium hover:underline cursor-pointer">
-                UST Sports IT Team
+                VU Sports IT Team
               </span>
             </p>
           </div>
@@ -80,7 +80,7 @@ const Footer = () => {
 
         {/* --- Divider --- */}
         <div className="mt-8 border-t border-gray-200 dark:border-gray-800 pt-6 text-center text-xs text-gray-500 dark:text-gray-500">
-          <p>Made with ❤️ by <span className="text-teal-200/90 transform capitalize font-serif">UST Sports IT Team</span> </p>
+          <p>Made with ❤️ by <span className="text-teal-200/90 transform capitalize font-serif">VU Sports IT Team</span> </p>
         </div>
       </div>
     </footer>
