@@ -226,7 +226,7 @@ function Home() {
             {[
               /* same event data as before */
               {
-                title: "UST Inter-University Championship 2025",
+                title: "VU Inter-University Championship 2025",
                 date: "Nov 12, 2025",
                 desc: "Top universities compete in football, cricket, and athletics. Join the excitement!",
               },
@@ -332,15 +332,15 @@ function Home() {
             className="relative rounded-2xl overflow-hidden shadow-2xl h-[350px] sm:h-[450px] border border-gray-200"
           >
             <iframe
-              title="Lahore Institute of Science and Technology Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13609.807310805875!2d74.381667!3d31.482667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391904e58b2b5d91%3A0xf2c07e3e4d1f1cf5!2sLahore%20Institute%20of%20Science%20and%20Technology%20(LIST)!5e0!3m2!1sen!2s!4v1730180032000!5m2!1sen!2s"
-              width="100%"
-              height="100%"
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="rounded-2xl"
-            ></iframe>
+  title="Virtual University of Pakistan"
+  src="https://www.google.com/maps?q=Virtual+University+of+Pakistan+Head+Office+Lahore&output=embed"
+  width="100%"
+  height="100%"
+  allowFullScreen=""
+  loading="lazy"
+  referrerPolicy="no-referrer-when-downgrade"
+  className="rounded-2xl"
+></iframe>
           </motion.div>
         </div>
       </section>
