@@ -104,8 +104,9 @@ def create_app():
     from app.routes.event_routes import event_bp
     from app.routes.team_routes import team_bp
     from app.routes.sport_category_routes import sport_category_bp
-    from app.routes.profile_routes import profile_bp
+    # from app.routes.profile_routes import profile_bp
     from app.routes.chat_routes import chat_bp
+    from app.routes.profile_routes import profile_bp
     
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(user_bp, url_prefix='/users')
@@ -113,7 +114,7 @@ def create_app():
     app.register_blueprint(event_bp, url_prefix='/events')
     app.register_blueprint(team_bp, url_prefix='/team')
     app.register_blueprint(sport_category_bp, url_prefix='/sport-categories')
-    app.register_blueprint(profile_bp, url_prefix='/profile')
+    app.register_blueprint(profile_bp, url_prefix="/profiles")
     app.register_blueprint(chat_bp, url_prefix='/')
     
     # Initialize SocketIO with app

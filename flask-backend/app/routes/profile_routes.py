@@ -1,44 +1,39 @@
-# from flask import Blueprint, jsonify
-# from app.middleware.auth import auth
+from flask import Blueprint
+from flask_jwt_extended import jwt_required
+from app.controllers.profile_controller import *
+from app.middleware.auth import role
 
-# profile_bp = Blueprint('profile', __name__)
+profile_bp = Blueprint("profiles", __name__)
 
-# @profile_bp.route('/getProfile', methods=['GET'])
-# @auth
-# def get_profile():
-#     try:
-#         return jsonify(request.user), 200
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 400
+# =========================
+# USER ROUTES
+# =========================
 
-
-
-from flask import Blueprint, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models.user import User
-
-profile_bp = Blueprint('profile', __name__)
-
-@profile_bp.route('/getProfile', methods=['GET'])
+@profile_bp.route("/me", methods=["GET"])
 @jwt_required()
-def get_profile():
-    """Get current user profile"""
-    try:
-        # Get user ID from JWT token
-        user_id = get_jwt_identity()
-        
-        # Fetch user from database
-        user = User.find_by_id(user_id)
-        if not user:
-            return jsonify({'error': 'User not found'}), 404
-        
-        # Remove sensitive data
-        if 'password' in user:
-            del user['password']
-        
-        # Convert ObjectId to string
-        user['_id'] = str(user['_id'])
-        
-        return jsonify(user), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+def get_my_profile_route():
+    return get_my_profile()
+
+
+@profile_bp.route("/update", methods=["PUT"])
+@jwt_required()
+def update_profile_route():
+    return update_profile()
+
+
+# =========================
+# ADMIN ROUTES
+# =========================
+
+@profile_bp.route("/", methods=["GET"])
+@jwt_required()
+@role("admin")
+def get_all_profiles_route():
+    return get_all_profiles()
+
+
+@profile_bp.route("/<profile_id>", methods=["PUT"])
+@jwt_required()
+@role("admin")
+def admin_update_profile_route(profile_id):
+    return admin_update_profile(profile_id)

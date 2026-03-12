@@ -12,6 +12,7 @@ const navItems = [
   { label: "Approve Teams", path: "/admin/pending-teams", icon: <User className="w-5 h-5" /> },
   { label: "Categories", path: "/admin/sports-categories", icon: <Trophy className="w-5 h-5" /> },
   { label: "Reports", path: "/admin/reports", icon: <FileText className="w-5 h-5" /> },
+  { label: "Profiles", path: "/admin/profiles", icon: <User className="w-5 h-5" /> },
 ];
 
 export default function Sidebar() {

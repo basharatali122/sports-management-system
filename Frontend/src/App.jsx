@@ -16,6 +16,11 @@ import LoadingSpinner from "./Components/LoadingSpinner/LoadingSpinner.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx"; 
 import Unauthorized from "./Pages/Unauthorized.jsx";
 
+// profile components 
+
+// import ViewProfile from "./Components/ViewProfile.jsx";
+
+
 // Protected Routing
 const ProtectedRoute = lazy(() => import("./routes/ProtectedRoutes.jsx"));
 
@@ -26,7 +31,7 @@ const Login = lazy(() => import("./Pages/Login.jsx"));
 const AdminPanel = lazy(() => import("./Pages/AdminPanel.jsx"));
 const CoachDashboard = lazy(() => import("./Pages/CoachDashboard.jsx"));
 const ParticipantDashboard = lazy(() => import("./Pages/ParticipantDashboard.jsx"));
-const EditProfile = lazy(() => import("./Pages/EditProfile.jsx"));
+
 const AuthRedirect = lazy(() => import("./Components/AuthRedirect.jsx"));
 const MemorialData = lazy(() => import("./Components/MemorialData/MemorialData.jsx"));
 const NotFound = lazy(() => import("./Pages/NotFound.jsx"));
@@ -40,6 +45,8 @@ const PendingTeams = lazy(() => import("./Components/AdminComponents/PendingTeam
 const SportsCategories = lazy(() => import("./Components/AdminComponents/SportsCategories.jsx"));
 const ManageUser = lazy(() => import("./Components/AdminComponents/ManageUser.jsx"));
 const AdminReports = lazy(() => import("./Components/AdminComponents/Reports.jsx"));
+
+const AdminProfiles = lazy(()=> import("./Components/AdminComponents/AdminProfiles.jsx"));
 
 // Coach Components
 const DashboardCoach = lazy(() => import("./Components/CoachComponents/Dashboard.jsx"));
@@ -72,8 +79,9 @@ const Feedback = lazy(() =>
   import("./Components/ParticipantComponents/Feedback.jsx")
 );
 const ViewProfile = lazy(() =>
-  import("./Components/ParticipantComponents/ViewProfile.jsx")
+  import("./Components/ViewProfile.jsx")
 );
+const EditProfile = lazy(() => import("./Components/EditProfile.jsx"));
 
 function App() {
   return (
@@ -94,6 +102,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/auth-redirect" element={<AuthRedirect />} />
+            <Route path="/view-profile" element={<ViewProfile/>}/>
+            <Route path="/edit-profile" element={<EditProfile/>}/>
 
             {/* 🔵 Participant Dashboard */}
             <Route element={<ProtectedRoute allowedRoles={["participant"]} />}>
@@ -134,6 +144,7 @@ function App() {
                 <Route path="pending-teams" element={<PendingTeams />} />
                 <Route path="sports-categories" element={<SportsCategories />} />
                 <Route path="reports" element={<AdminReports />} />
+                <Route path="profiles" element={<AdminProfiles />} />
               </Route>
             </Route>
 

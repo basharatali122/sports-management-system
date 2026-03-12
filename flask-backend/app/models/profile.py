@@ -1,35 +1,50 @@
-from app.config.db import db
-from bson import ObjectId
 from datetime import datetime
+from app.config.database import get_db
+from bson import ObjectId
+
 
 class Profile:
-    collection = db["profiles"]
 
-    @staticmethod
-    def create(profile_data):
+    collection = None
+
+    @classmethod
+    def get_collection(cls):
+        if cls.collection is None:
+            db = get_db()
+            cls.collection = db.profiles
+        return cls.collection
+
+    @classmethod
+    def create(cls, profile_data):
+        collection = cls.get_collection()
         profile_data["created_at"] = datetime.utcnow()
-        result = Profile.collection.insert_one(profile_data)
+        result = collection.insert_one(profile_data)
         return result.inserted_id
 
-    @staticmethod
-    def find_by_user(user_id):
-        return Profile.collection.find_one({"userId": ObjectId(user_id)})
+    @classmethod
+    def find_by_user(cls, user_id):
+        collection = cls.get_collection()
+        return collection.find_one({"userId": ObjectId(user_id)})
 
-    @staticmethod
-    def update_by_user(user_id, data):
-        return Profile.collection.update_one(
+    @classmethod
+    def update_by_user(cls, user_id, data):
+        collection = cls.get_collection()
+        return collection.update_one(
             {"userId": ObjectId(user_id)},
             {"$set": data}
         )
 
-    @staticmethod
-    def find_all():
-        return list(Profile.collection.find())
+    @classmethod
+    def find_all(cls):
+        collection = cls.get_collection()
+        return list(collection.find())
 
-    @staticmethod
-    def find_by_id(profile_id):
-        return Profile.collection.find_one({"_id": ObjectId(profile_id)})
+    @classmethod
+    def find_by_id(cls, profile_id):
+        collection = cls.get_collection()
+        return collection.find_one({"_id": ObjectId(profile_id)})
 
-    @staticmethod
-    def delete_by_id(profile_id):
-        return Profile.collection.delete_one({"_id": ObjectId(profile_id)})
+    @classmethod
+    def delete_by_id(cls, profile_id):
+        collection = cls.get_collection()
+        return collection.delete_one({"_id": ObjectId(profile_id)})

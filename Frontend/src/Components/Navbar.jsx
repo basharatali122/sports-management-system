@@ -48,6 +48,18 @@ function Navbar() {
     }
   };
 
+  const handleViewProfile = () =>{
+    setIsDropdownOpen(false);
+    setIsMenuOpen(false);
+    navigate("/view-profile");
+  }
+
+  const handleEditProfile = ()=>{
+    setIsDropdownOpen(false);
+    setIsMenuOpen(false);
+    navigate("/edit-profile");
+  }
+
   // 🔒 Auto close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -102,6 +114,12 @@ function Navbar() {
                       className="flex items-center gap-2 w-full px-5 py-3 text-sm font-semibold text-red-600 hover:bg-gray-100 rounded-b-xl transition"
                     >
                       <LogOut size={16} /> Logout
+                    </button>
+                    <button onClick={()=> handleViewProfile()} className="flex items-center gap-2 w-full px-5 py-3 text-sm font-semibold text-red-600 hover:bg-gray-100 rounded-b-xl transition">
+                      View Profile
+                    </button>
+                    <button onClick={()=>handleEditProfile()} className="flex items-center gap-2 w-full px-5 py-3 text-sm font-semibold text-red-600 hover:bg-gray-100 rounded-b-xl transition">
+                      Edit Profile
                     </button>
                   </div>
                 )}
