@@ -3,7 +3,7 @@ from bson import ObjectId
 from flask_jwt_extended import get_jwt_identity, get_jwt
 from app.models.profile import Profile
 from app.response_handler import response_handler
-
+from app.models.user import User
 
 def convert_objectid(data):
     if not data:
@@ -124,28 +124,129 @@ def update_profile():
 # =========================
 # ADMIN VIEW ALL PROFILES
 # =========================
+# def get_all_profiles():
+#     try:
+#         profiles = Profile.find_all()
+
+#         result = []
+#         for p in profiles:
+#             result.append(convert_objectid(p))
+
+#         return response_handler(data=result)
+
+#     except Exception as e:
+#         return response_handler(error=str(e), status_code=500)
+
+
+
+
 def get_all_profiles():
     try:
         profiles = Profile.find_all()
 
         result = []
+
         for p in profiles:
-            result.append(convert_objectid(p))
+
+            user = User.find_by_id(str(p["userId"]))
+
+            profile_data = convert_objectid(p)
+
+            if user:
+                profile_data["name"] = user.get("name")
+                profile_data["role"] = user.get("role")
+                profile_data["sport"] = user.get("sport")
+                profile_data["sportsPreferences"] = user.get("sportsPreferences")
+
+            result.append(profile_data)
 
         return response_handler(data=result)
 
     except Exception as e:
         return response_handler(error=str(e), status_code=500)
 
-
 # =========================
 # ADMIN UPDATE USER PROFILE
 # =========================
+
 def admin_update_profile(profile_id):
+    try:
+
+        data = request.get_json()
+
+        profile = Profile.find_by_id(profile_id)
+
+        if not profile:
+            return response_handler(
+                error="Profile not found",
+                status_code=404
+            )
+
+        user_id = profile["userId"]
+
+        # -----------------------
+        # UPDATE PROFILE FIELDS
+        # -----------------------
+
+        profile_fields = [
+            "bio",
+            "location",
+            "phone",
+            "sportsPreferences",
+            "pastParticipation",
+            "achievements",
+            "sportsExpertise",
+            "teamsManaged",
+            "availability"
+        ]
+
+        profile_update = {}
+
+        for field in profile_fields:
+            if field in data:
+                profile_update[field] = data[field]
+
+        if profile_update:
+            Profile.collection.update_one(
+                {"_id": ObjectId(profile_id)},
+                {"$set": profile_update}
+            )
+
+        # -----------------------
+        # UPDATE USER FIELDS
+        # -----------------------
+
+        user_fields = [
+            "name",
+            "role",
+            "sport"
+        ]
+
+        user_update = {}
+
+        for field in user_fields:
+            if field in data:
+                user_update[field] = data[field]
+
+        if user_update:
+            User.update_by_id(user_id, user_update)
+
+        updated_profile = Profile.find_by_id(profile_id)
+
+        return response_handler(
+            data=convert_objectid(updated_profile),
+            message="Profile updated by admin"
+        )
+
+    except Exception as e:
+        return response_handler(error=str(e), status_code=500)
+    
+    
+# def admin_update_profile(profile_id):
     try:
         data = request.get_json()
 
-        Profile.collection().update_one(
+        Profile.collection.update_one(
             {"_id": ObjectId(profile_id)},
             {"$set": data}
         )
