@@ -1,15 +1,3 @@
-# from flask import Blueprint
-# from app.controllers.sports_category_controller import *
-
-# sport_category_bp = Blueprint('sport_categories', __name__)
-
-# sport_category_bp.route('/', methods=['POST'])(create_category)
-# sport_category_bp.route('/<category_id>/assign-organizer', methods=['PUT'])(assign_organizer)
-# sport_category_bp.route('/', methods=['GET'])(get_categories)
-# sport_category_bp.route('/<category_id>', methods=['DELETE'])(delete_category)
-
-
-
 
 from flask import Blueprint
 from flask_jwt_extended import jwt_required

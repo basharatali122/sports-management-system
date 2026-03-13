@@ -103,13 +103,20 @@ const Login = () => {
         navigate(redirectPath, { replace: true });
       }, 1000);
     } catch (err) {
-      console.error(err);
-      let msg = "An error occurred while logging in.";
-      if (err.response?.data?.message) msg = err.response.data.message;
-      else if (err.request)
-        msg = "No response from server. Please try again later.";
-      setMessage({ text: msg, type: "error" });
-    } finally {
+
+  let msg = "Something went wrong.";
+
+  if (err.response?.data?.message) msg = err.response.data.message;
+  else if (err.response?.data?.error) msg = err.response.data.error;
+  else if (err.request) msg = "Server not responding. Try again later.";
+  else msg = err.message;
+
+  setMessage({
+    text: msg,
+    type: "error"
+  });
+
+} finally {
       setLoading(false);
     }
   };
