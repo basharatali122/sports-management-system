@@ -1,4 +1,6 @@
 
+
+
 # from flask import Flask, jsonify
 # from flask_cors import CORS
 # from flask_jwt_extended import JWTManager
@@ -20,18 +22,18 @@
 #     app.config['JWT_SECRET_KEY'] = os.getenv('SECRET', 'your-jwt-secret')
     
 #     # 🔥 CRITICAL JWT CONFIGURATIONS
-#     app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']  # Check both
-#     app.config['JWT_HEADER_NAME'] = 'Authorization'            # Header name
-#     app.config['JWT_HEADER_TYPE'] = 'Bearer'                   # Header type
-#     app.config['JWT_COOKIE_NAME'] = 'access_token_cookie'      # Cookie name
-#     app.config['JWT_COOKIE_CSRF_PROTECT'] = False              # Disable CSRF for dev
-#     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 3600              # 1 hour
+#     app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
+#     app.config['JWT_HEADER_NAME'] = 'Authorization'
+#     app.config['JWT_HEADER_TYPE'] = 'Bearer'
+#     app.config['JWT_COOKIE_NAME'] = 'access_token_cookie'
+#     app.config['JWT_COOKIE_CSRF_PROTECT'] = False
+#     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 3600
     
 #     # Initialize extensions
 #     CORS(app, 
 #          origins=["http://localhost:5173"], 
 #          supports_credentials=True,
-#          allow_headers=["Content-Type", "Authorization"],      # Allow Authorization header
+#          allow_headers=["Content-Type", "Authorization"],
 #          expose_headers=["Content-Type", "Authorization"])
     
 #     jwt = JWTManager(app)
@@ -43,10 +45,12 @@
 #     from app.routes.event_routes import event_bp
 #     from app.routes.team_routes import team_bp
 #     from app.routes.sport_category_routes import sport_category_bp
-#     # from app.routes.profile_routes import profile_bp
 #     from app.routes.chat_routes import chat_bp
 #     from app.routes.profile_routes import profile_bp
-    
+#     from app.routes.notification_routes import notification_bp
+#     from app.routes.product_routes import product_bp
+#     from app.routes.cart_routes import cart_bp
+#     from app.routes.order_routes import order_bp
 #     app.register_blueprint(auth_bp, url_prefix='/auth')
 #     app.register_blueprint(user_bp, url_prefix='/users')
 #     app.register_blueprint(admin_bp, url_prefix='/admin')
@@ -54,10 +58,18 @@
 #     app.register_blueprint(team_bp, url_prefix='/team')
 #     app.register_blueprint(sport_category_bp, url_prefix='/sport-categories')
 #     app.register_blueprint(profile_bp, url_prefix="/profiles")
-#     app.register_blueprint(chat_bp, url_prefix='/')
+#     app.register_blueprint(chat_bp, url_prefix='/chat')
+#     app.register_blueprint(notification_bp, url_prefix='/notifications')
+#     # Register blueprints with your existing registrations
+#     app.register_blueprint(product_bp, url_prefix='/products')
+#     app.register_blueprint(cart_bp, url_prefix='/cart')
+#     app.register_blueprint(order_bp, url_prefix='/orders')
     
 #     # Initialize SocketIO with app
-#     socketio.init_app(app)
+#     socketio.init_app(app, cors_allowed_origins="http://localhost:5173")
+    
+#     # Import socket events
+#     from app import socket_events
     
 #     # Root route
 #     @app.route('/')
@@ -71,7 +83,6 @@
 #     return app
 
 
-
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
@@ -83,7 +94,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize SocketIO
-socketio = SocketIO(cors_allowed_origins="http://localhost:5173")
+socketio = SocketIO(cors_allowed_origins="*")  # Temporarily allow all for debugging
 
 def create_app():
     app = Flask(__name__)
@@ -92,7 +103,7 @@ def create_app():
     app.config['SECRET_KEY'] = os.getenv('SECRET', 'your-secret-key')
     app.config['JWT_SECRET_KEY'] = os.getenv('SECRET', 'your-jwt-secret')
     
-    # 🔥 CRITICAL JWT CONFIGURATIONS
+    # JWT CONFIGURATIONS
     app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies']
     app.config['JWT_HEADER_NAME'] = 'Authorization'
     app.config['JWT_HEADER_TYPE'] = 'Bearer'
@@ -100,12 +111,16 @@ def create_app():
     app.config['JWT_COOKIE_CSRF_PROTECT'] = False
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 3600
     
-    # Initialize extensions
+    # FIXED: More permissive CORS configuration
     CORS(app, 
-         origins=["http://localhost:5173"], 
+         origins=["http://localhost:5173", "http://127.0.0.1:5173"], 
          supports_credentials=True,
-         allow_headers=["Content-Type", "Authorization"],
-         expose_headers=["Content-Type", "Authorization"])
+         allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
+         expose_headers=["Content-Type", "Authorization"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+    
+    # Add CORS headers manually as a fallback
+  
     
     jwt = JWTManager(app)
     
@@ -119,6 +134,9 @@ def create_app():
     from app.routes.chat_routes import chat_bp
     from app.routes.profile_routes import profile_bp
     from app.routes.notification_routes import notification_bp
+    from app.routes.product_routes import product_bp
+    from app.routes.cart_routes import cart_bp
+    from app.routes.order_routes import order_bp
     
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(user_bp, url_prefix='/users')
@@ -129,9 +147,12 @@ def create_app():
     app.register_blueprint(profile_bp, url_prefix="/profiles")
     app.register_blueprint(chat_bp, url_prefix='/chat')
     app.register_blueprint(notification_bp, url_prefix='/notifications')
+    app.register_blueprint(product_bp, url_prefix='/products')
+    app.register_blueprint(cart_bp, url_prefix='/cart')
+    app.register_blueprint(order_bp, url_prefix='/orders')
     
     # Initialize SocketIO with app
-    socketio.init_app(app, cors_allowed_origins="http://localhost:5173")
+    socketio.init_app(app, cors_allowed_origins="*")  # Allow all for debugging
     
     # Import socket events
     from app import socket_events

@@ -1,76 +1,76 @@
-import { Link, Outlet } from "react-router-dom";
-import DashboardCard from "./DashboardCard";
-import { motion } from "framer-motion";
+// import { Link, Outlet } from "react-router-dom";
+// import DashboardCard from "./DashboardCard";
+// import { motion } from "framer-motion";
 
-// Lucide icons
-import {
-  Users,
-  UserCheck,
-  CalendarDays,
-  Trophy,
-  FileBarChart,
-  ClipboardList,
-} from "lucide-react";
+// // Lucide icons
+// import {
+//   Users,
+//   UserCheck,
+//   CalendarDays,
+//   Trophy,
+//   FileBarChart,
+//   ClipboardList,
+// } from "lucide-react";
 
-const cards = [
-  {
-    title: "Manage Participants",
-    icon: <Users className="w-6 h-6 text-emerald-500" />,
-    path: "/admin/user-management",
-  },
-  {
-    title: "Approve Teams",
-    icon: <UserCheck className="w-6 h-6 text-blue-500" />,
-    path: "/admin/pending-teams",
-  },
-  {
-    title: "Approve Events",
-    icon: <ClipboardList className="w-6 h-6 text-indigo-500" />,
-    path: "/admin/pending-event",
-  },
-  {
-    title: "Schedule Events",
-    icon: <CalendarDays className="w-6 h-6 text-teal-500" />,
-    path: "/admin/events",
-  },
-  {
-    title: "Manage Sports Categories",
-    icon: <Trophy className="w-6 h-6 text-amber-500" />,
-    path: "/admin/sports-categories",
-  },
-  {
-    title: "Reports",
-    icon: <FileBarChart className="w-6 h-6 text-rose-500" />,
-    path: "/admin/reports",
-  },
-];
+// const cards = [
+//   {
+//     title: "Manage Participants",
+//     icon: <Users className="w-6 h-6 text-emerald-500" />,
+//     path: "/admin/user-management",
+//   },
+//   {
+//     title: "Approve Teams",
+//     icon: <UserCheck className="w-6 h-6 text-blue-500" />,
+//     path: "/admin/pending-teams",
+//   },
+//   {
+//     title: "Approve Events",
+//     icon: <ClipboardList className="w-6 h-6 text-indigo-500" />,
+//     path: "/admin/pending-event",
+//   },
+//   {
+//     title: "Schedule Events",
+//     icon: <CalendarDays className="w-6 h-6 text-teal-500" />,
+//     path: "/admin/events",
+//   },
+//   {
+//     title: "Manage Sports Categories",
+//     icon: <Trophy className="w-6 h-6 text-amber-500" />,
+//     path: "/admin/sports-categories",
+//   },
+//   {
+//     title: "Reports",
+//     icon: <FileBarChart className="w-6 h-6 text-rose-500" />,
+//     path: "/admin/reports",
+//   },
+// ];
 
-export default function Dashboard() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6 md:p-10 font-[Poppins]"
-    >
-      {cards.map((card, i) => (
-        <Link to={card.path} key={i}>
-          <DashboardCard {...card} />
-        </Link>
-      ))}
+// export default function Dashboard() {
+//   return (
+//     <motion.div
+//       initial={{ opacity: 0, y: 20 }}
+//       animate={{ opacity: 1, y: 0 }}
+//       transition={{ duration: 0.4 }}
+//       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6 md:p-10 font-[Poppins]"
+//     >
+//       {cards.map((card, i) => (
+//         <Link to={card.path} key={i}>
+//           <DashboardCard {...card} />
+//         </Link>
+//       ))}
 
-      <Outlet />
+//       <Outlet />
 
-      {/* Import Poppins font */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-        * {
-          font-family: 'Poppins', sans-serif !important;
-        }
-      `}</style>
-    </motion.div>
-  );
-}
+//       {/* Import Poppins font */}
+//       <style>{`
+//         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+//         * {
+//           font-family: 'Poppins', sans-serif !important;
+//         }
+//       `}</style>
+//     </motion.div>
+//   );
+// }
 
 
 // import { Link, Outlet } from "react-router-dom";
@@ -167,3 +167,108 @@ export default function Dashboard() {
 //     </motion.div>
 //   );
 // }
+
+
+
+
+import { Link, Outlet } from "react-router-dom";
+import DashboardCard from "./DashboardCard";
+import { motion } from "framer-motion";
+
+// Lucide icons
+import {
+  Users,
+  UserCheck,
+  CalendarDays,
+  Trophy,
+  FileBarChart,
+  ClipboardList,
+  ShoppingBag,
+  Package,
+  Store,
+} from "lucide-react";
+
+const cards = [
+  // Existing cards
+  {
+    title: "Manage Participants",
+    icon: <Users className="w-6 h-6 text-emerald-500" />,
+    path: "/admin/user-management",
+  },
+  {
+    title: "Approve Teams",
+    icon: <UserCheck className="w-6 h-6 text-blue-500" />,
+    path: "/admin/pending-teams",
+  },
+  {
+    title: "Approve Events",
+    icon: <ClipboardList className="w-6 h-6 text-indigo-500" />,
+    path: "/admin/pending-event",
+  },
+  {
+    title: "Schedule Events",
+    icon: <CalendarDays className="w-6 h-6 text-teal-500" />,
+    path: "/admin/events",
+  },
+  {
+    title: "Manage Sports Categories",
+    icon: <Trophy className="w-6 h-6 text-amber-500" />,
+    path: "/admin/sports-categories",
+  },
+  {
+    title: "Reports",
+    icon: <FileBarChart className="w-6 h-6 text-rose-500" />,
+    path: "/admin/reports",
+  },
+  
+  // 🆕 New eCommerce Management Cards
+  {
+    title: "Manage Products",
+    icon: <ShoppingBag className="w-6 h-6 text-purple-500" />,
+    path: "/admin/products",
+    description: "Add, edit, or remove sports products",
+  },
+  {
+    title: "Manage Orders",
+    icon: <Package className="w-6 h-6 text-orange-500" />,
+    path: "/admin/orders",
+    description: "View and update order status",
+  },
+  {
+    title: "Shop Overview",
+    icon: <Store className="w-6 h-6 text-pink-500" />,
+    path: "/products",
+    description: "View shop as customer",
+  },
+];
+
+export default function Dashboard() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6 md:p-10 font-[Poppins]"
+    >
+      {cards.map((card, i) => (
+        <Link to={card.path} key={i}>
+          <DashboardCard 
+            title={card.title} 
+            icon={card.icon}
+            description={card.description}
+          />
+        </Link>
+      ))}
+
+      <Outlet />
+
+      {/* Import Poppins font */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        * {
+          font-family: 'Poppins', sans-serif !important;
+        }
+      `}</style>
+    </motion.div>
+  );
+}
