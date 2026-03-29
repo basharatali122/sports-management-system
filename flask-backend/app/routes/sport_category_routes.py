@@ -7,7 +7,7 @@ from app.middleware.auth import role
 sport_category_bp = Blueprint('sport_categories', __name__)
 
 # ========== PUBLIC ROUTES ==========
-@sport_category_bp.route('/', methods=['GET'])
+@sport_category_bp.route('', methods=['GET'])
 def get_categories_route():
     """Get all sport categories - public"""
     return get_categories()

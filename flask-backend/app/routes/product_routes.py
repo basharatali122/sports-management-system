@@ -21,6 +21,8 @@ from app.controllers import product_controller
 product_bp = Blueprint('products', __name__)
 
 # Public routes - remove trailing slashes
+product_bp.route('/', methods=['GET'])(product_controller.get_all_products)  # Changed from '/' to ''
+
 product_bp.route('', methods=['GET'])(product_controller.get_all_products)  # Changed from '/' to ''
 product_bp.route('/<product_id>', methods=['GET'])(product_controller.get_product)
 product_bp.route('/categories', methods=['GET'])(product_controller.get_categories)
