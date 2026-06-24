@@ -254,6 +254,10 @@ const AdminReports = lazy(() => import("./Components/AdminComponents/Reports.jsx
 const AdminProfiles = lazy(() => import("./Components/AdminComponents/AdminProfiles.jsx"));
 const ManageProducts = lazy(() => import("./Components/AdminComponents/ManageProducts.jsx"));
 const ManageOrders = lazy(() => import("./Components/AdminComponents/ManageOrders.jsx"));
+import ManageCoaches      from "./Components/AdminComponents/ManageCoaches";
+import ManageParticipants from "./Components/AdminComponents/ManageParticipants";
+import ManageTeams        from "./Components/AdminComponents/ManageTeams";
+
 
 // Coach Components
 const DashboardCoach = lazy(() => import("./Components/CoachComponents/Dashboard.jsx"));
@@ -381,6 +385,10 @@ function AppContent() {
             <Route path="/admin" element={<AdminPanel />}>
               <Route index element={<Dashboard />} />
               <Route path="user-management" element={<ManageUser />} />
+              <Route path="manage-coaches"      element={<ManageCoaches />} />
+              <Route path="manage-participants" element={<ManageParticipants />} />
+              <Route path="manage-teams"        element={<ManageTeams />} />
+
               <Route path="messages" element={<SendNotification />} />
               <Route path="events" element={<CreateEvent />} />
               <Route path="pending-event" element={<PendingEvents />} />
@@ -436,3 +444,53 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 1 — Add these 3 imports at the top of App.jsx (with your other admin imports)
+// ─────────────────────────────────────────────────────────────────────────────
+
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP 2 — Add these 3 <Route> lines inside the admin <Route path="/admin"> block
+//          right after the existing  <Route path="user-management" .../>  line
+// ─────────────────────────────────────────────────────────────────────────────
+
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Full admin block for reference — your existing code + the 3 new routes added:
+// ─────────────────────────────────────────────────────────────────────────────
+
+/*
+<Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+  <Route path="/admin" element={<AdminPanel />}>
+    <Route index element={<Dashboard />} />
+    <Route path="user-management"   element={<ManageUser />} />
+
+    // ✅ NEW — paste these 3 lines:
+    <Route path="manage-coaches"      element={<ManageCoaches />} />
+    <Route path="manage-participants" element={<ManageParticipants />} />
+    <Route path="manage-teams"        element={<ManageTeams />} />
+
+    <Route path="messages"          element={<SendNotification />} />
+    <Route path="events"            element={<CreateEvent />} />
+    <Route path="pending-event"     element={<PendingEvents />} />
+    <Route path="pending-teams"     element={<PendingTeams />} />
+    <Route path="sports-categories" element={<SportsCategories />} />
+    <Route path="reports"           element={<AdminReports />} />
+    <Route path="profiles"          element={<AdminProfiles />} />
+    <Route path="products"          element={<ManageProducts />} />
+    <Route path="orders"            element={<ManageOrders />} />
+  </Route>
+</Route>
+*/

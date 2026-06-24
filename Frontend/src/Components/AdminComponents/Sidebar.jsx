@@ -3,16 +3,27 @@ import { Link, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import useUser from "../../context/UserContext";
 import { ThemeContext } from "../../context/ThemeContext";
-import { User, Users, Calendar, MessageSquare, FileText, Trophy } from "lucide-react";
+import {
+  User,
+  Users,
+  Calendar,
+  FileText,
+  Trophy,
+  UserCog,
+  Shield,
+} from "lucide-react";
 
 const navItems = [
-  { label: "View Users", path: "/admin/user-management", icon: <Users className="w-5 h-5" /> },
-  {label:"Create Events", path:"/admin/events", icon: <Calendar className="w-5 h-5"/>},
-  { label: "Approve Events", path: "/admin/pending-event", icon: <Calendar className="w-5 h-5" /> },
-  { label: "Approve Teams", path: "/admin/pending-teams", icon: <User className="w-5 h-5" /> },
-  { label: "Categories", path: "/admin/sports-categories", icon: <Trophy className="w-5 h-5" /> },
-  { label: "Reports", path: "/admin/reports", icon: <FileText className="w-5 h-5" /> },
-  { label: "Profiles", path: "/admin/profiles", icon: <User className="w-5 h-5" /> },
+  { label: "View Users",        path: "/admin/user-management",   icon: <Users className="w-5 h-5" /> },
+  { label: "Manage Coaches",    path: "/admin/manage-coaches",     icon: <UserCog className="w-5 h-5" /> },
+  { label: "Manage Participants", path: "/admin/manage-participants", icon: <Users className="w-5 h-5" /> },
+  { label: "Manage Teams",      path: "/admin/manage-teams",       icon: <Shield className="w-5 h-5" /> },
+  { label: "Create Events",     path: "/admin/events",             icon: <Calendar className="w-5 h-5" /> },
+  { label: "Approve Events",    path: "/admin/pending-event",      icon: <Calendar className="w-5 h-5" /> },
+  { label: "Approve Teams",     path: "/admin/pending-teams",      icon: <User className="w-5 h-5" /> },
+  { label: "Categories",        path: "/admin/sports-categories",  icon: <Trophy className="w-5 h-5" /> },
+  { label: "Reports",           path: "/admin/reports",            icon: <FileText className="w-5 h-5" /> },
+  { label: "Profiles",          path: "/admin/profiles",           icon: <User className="w-5 h-5" /> },
 ];
 
 export default function Sidebar() {
@@ -22,7 +33,6 @@ export default function Sidebar() {
 
   const isDark = themeMode === "dark";
 
-  // Theme Styles
   const sidebarBg = isDark
     ? "bg-gray-900/70 backdrop-blur-xl border-gray-800"
     : "bg-white/80 backdrop-blur-md border-gray-200";
@@ -46,10 +56,8 @@ export default function Sidebar() {
         transition={{ delay: 0.2 }}
         className="flex flex-col items-center py-6 border-b border-gray-700/20"
       >
-        <div
-          className={`h-16 w-16 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg`}
-        >
-          {user?.name?.[0]?.toUpperCase() || "login"}
+        <div className="h-16 w-16 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+          {user?.name?.[0]?.toUpperCase() || "A"}
         </div>
         <h2 className={`mt-3 text-lg text-center font-semibold ${headingColor}`}>
           {user?.name || ""} <br />
@@ -58,14 +66,14 @@ export default function Sidebar() {
       </motion.div>
 
       {/* Nav Items */}
-      <nav className="flex-1 mt-6 space-y-2 px-4">
+      <nav className="flex-1 mt-4 space-y-1 px-4 overflow-y-auto">
         {navItems.map(({ label, path, icon }) => {
           const isActive = location.pathname === path;
           return (
             <motion.div key={label} whileHover={{ x: 6 }} transition={{ type: "spring", stiffness: 300 }}>
               <Link
                 to={path}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm md:text-base transition-all duration-300
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300
                   ${isActive ? activeBg : `${hoverBg} ${textColor}`}
                 `}
               >
@@ -82,12 +90,9 @@ export default function Sidebar() {
         <p className="opacity-80">© 2025 VU-Sports-Society</p>
       </div>
 
-      {/* Poppins Font Import */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-        * {
-          font-family: 'Poppins', sans-serif !important;
-        }
+        * { font-family: 'Poppins', sans-serif !important; }
       `}</style>
     </motion.aside>
   );

@@ -124,19 +124,6 @@ def update_profile():
 # =========================
 # ADMIN VIEW ALL PROFILES
 # =========================
-# def get_all_profiles():
-#     try:
-#         profiles = Profile.find_all()
-
-#         result = []
-#         for p in profiles:
-#             result.append(convert_objectid(p))
-
-#         return response_handler(data=result)
-
-#     except Exception as e:
-#         return response_handler(error=str(e), status_code=500)
-
 
 
 

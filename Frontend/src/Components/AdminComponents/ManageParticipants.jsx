@@ -1,0 +1,689 @@
+// import React, { useEffect, useState, useContext } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
+// import axios from "axios";
+// import { ThemeContext } from "../../context/ThemeContext";
+// import { toast } from "react-hot-toast";
+// import { Trash2, ShieldOff, ShieldCheck, Loader2, Users, Search } from "lucide-react";
+
+// const BASE_URL = "http://localhost:3000";
+
+// export default function ManageParticipants() {
+//   const [participants, setParticipants] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [actionId, setActionId] = useState(null);
+//   const [search, setSearch] = useState("");
+//   const [confirmModal, setConfirmModal] = useState(null); // { type, participant }
+//   const { themeMode } = useContext(ThemeContext);
+//   const isDark = themeMode === "dark";
+
+//   const token = localStorage.getItem("token");
+//   const authHeader = { headers: { Authorization: `Bearer ${token}` } };
+
+//   const fetchParticipants = async () => {
+//     try {
+//       setLoading(true);
+//       const res = await axios.get(`${BASE_URL}/admin/participants`, authHeader);
+//       const data = res.data?.data ?? res.data ?? [];
+//       setParticipants(Array.isArray(data) ? data : []);
+//     } catch {
+//       toast.error("Failed to fetch participants");
+//       setParticipants([]);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => { fetchParticipants(); }, []);
+
+//   const handleBlock = async (participant) => {
+//     setConfirmModal(null);
+//     setActionId(participant._id);
+//     try {
+//       const res = await axios.patch(
+//         `${BASE_URL}/admin/participants/${participant._id}/block`,
+//         {},
+//         authHeader
+//       );
+//       const updated = res.data?.data;
+//       if (updated) {
+//         setParticipants((prev) => prev.map((p) => (p._id === participant._id ? updated : p)));
+//       }
+//       const isBlocked = updated?.accountStatus === "blocked";
+//       toast.success(isBlocked ? "Participant blocked" : "Participant unblocked");
+//     } catch {
+//       toast.error("Action failed");
+//     } finally {
+//       setActionId(null);
+//     }
+//   };
+
+//   const handleDelete = async (participant) => {
+//     setConfirmModal(null);
+//     setActionId(participant._id);
+//     try {
+//       await axios.delete(`${BASE_URL}/admin/participants/${participant._id}`, authHeader);
+//       setParticipants((prev) => prev.filter((p) => p._id !== participant._id));
+//       toast.success("Participant deleted");
+//     } catch {
+//       toast.error("Delete failed");
+//     } finally {
+//       setActionId(null);
+//     }
+//   };
+
+//   const filtered = participants.filter((p) =>
+//     (p.name + p.email).toLowerCase().includes(search.toLowerCase())
+//   );
+
+//   // Theme helpers
+//   const card = isDark
+//     ? "bg-gray-900/70 border-gray-800 text-gray-100"
+//     : "bg-white/80 border-gray-200 text-gray-800";
+//   const input = isDark
+//     ? "bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-500"
+//     : "bg-gray-50 border-gray-300 text-gray-800 placeholder-gray-400";
+//   const rowHover = isDark ? "hover:bg-gray-800/60" : "hover:bg-emerald-50/60";
+//   const badge = (status) =>
+//     status === "blocked"
+//       ? "bg-red-500/20 text-red-400 border border-red-500/30"
+//       : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+//   const approvalBadge = (approved) =>
+//     approved
+//       ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+//       : "bg-orange-500/20 text-orange-400 border border-orange-500/30";
+
+//   return (
+//     <div className="space-y-6">
+//       {/* Header */}
+//       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+//         <div className="flex items-center gap-3">
+//           <Users className="w-7 h-7 text-emerald-500" />
+//           <h2 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+//             Manage Participants
+//           </h2>
+//           <span className="ml-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400">
+//             {participants.length}
+//           </span>
+//         </div>
+
+//         {/* Search */}
+//         <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${input} w-full sm:w-64`}>
+//           <Search className="w-4 h-4 text-gray-400 shrink-0" />
+//           <input
+//             className="bg-transparent outline-none text-sm w-full"
+//             placeholder="Search participants..."
+//             value={search}
+//             onChange={(e) => setSearch(e.target.value)}
+//           />
+//         </div>
+//       </div>
+
+//       {/* Table Card */}
+//       <motion.div
+//         initial={{ opacity: 0, y: 16 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         className={`rounded-2xl border shadow-lg overflow-hidden ${card}`}
+//       >
+//         {loading ? (
+//           <div className="flex justify-center items-center py-20">
+//             <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+//           </div>
+//         ) : filtered.length === 0 ? (
+//           <p className="text-center py-16 text-gray-400">No participants found.</p>
+//         ) : (
+//           <div className="overflow-x-auto">
+//             <table className="w-full text-sm">
+//               <thead>
+//                 <tr className={`text-xs uppercase tracking-wider ${isDark ? "bg-gray-800/80 text-gray-400" : "bg-gray-100 text-gray-500"}`}>
+//                   <th className="px-5 py-3 text-left">#</th>
+//                   <th className="px-5 py-3 text-left">Name</th>
+//                   <th className="px-5 py-3 text-left">Email</th>
+//                   <th className="px-5 py-3 text-left">Approved</th>
+//                   <th className="px-5 py-3 text-left">Status</th>
+//                   <th className="px-5 py-3 text-center">Actions</th>
+//                 </tr>
+//               </thead>
+//               <tbody className="divide-y divide-gray-700/20">
+//                 {filtered.map((p, idx) => (
+//                   <tr key={p._id} className={`transition-colors ${rowHover}`}>
+//                     <td className="px-5 py-3 text-gray-400">{idx + 1}</td>
+//                     <td className="px-5 py-3 font-medium">{p.name}</td>
+//                     <td className="px-5 py-3 text-gray-400">{p.email}</td>
+//                     <td className="px-5 py-3">
+//                       <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${approvalBadge(p.approved)}`}>
+//                         {p.approved ? "Approved" : "Pending"}
+//                       </span>
+//                     </td>
+//                     <td className="px-5 py-3">
+//                       <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${badge(p.accountStatus)}`}>
+//                         {p.accountStatus === "blocked" ? "Blocked" : "Active"}
+//                       </span>
+//                     </td>
+//                     <td className="px-5 py-3">
+//                       <div className="flex items-center justify-center gap-2">
+//                         {/* Block / Unblock */}
+//                         <button
+//                           onClick={() => setConfirmModal({ type: "block", participant: p })}
+//                           disabled={actionId === p._id}
+//                           title={p.accountStatus === "blocked" ? "Unblock" : "Block"}
+//                           className={`p-2 rounded-lg transition-colors ${
+//                             p.accountStatus === "blocked"
+//                               ? "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
+//                               : "bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30"
+//                           }`}
+//                         >
+//                           {actionId === p._id ? (
+//                             <Loader2 className="w-4 h-4 animate-spin" />
+//                           ) : p.accountStatus === "blocked" ? (
+//                             <ShieldCheck className="w-4 h-4" />
+//                           ) : (
+//                             <ShieldOff className="w-4 h-4" />
+//                           )}
+//                         </button>
+
+//                         {/* Delete */}
+//                         <button
+//                           onClick={() => setConfirmModal({ type: "delete", participant: p })}
+//                           disabled={actionId === p._id}
+//                           title="Delete"
+//                           className="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
+//                         >
+//                           <Trash2 className="w-4 h-4" />
+//                         </button>
+//                       </div>
+//                     </td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </table>
+//           </div>
+//         )}
+//       </motion.div>
+
+//       {/* Confirm Modal */}
+//       <AnimatePresence>
+//         {confirmModal && (
+//           <motion.div
+//             initial={{ opacity: 0 }}
+//             animate={{ opacity: 1 }}
+//             exit={{ opacity: 0 }}
+//             className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+//           >
+//             <motion.div
+//               initial={{ scale: 0.9, opacity: 0 }}
+//               animate={{ scale: 1, opacity: 1 }}
+//               exit={{ scale: 0.9, opacity: 0 }}
+//               className={`rounded-2xl p-6 w-80 shadow-2xl border ${isDark ? "bg-gray-900 border-gray-700 text-white" : "bg-white border-gray-200 text-gray-800"}`}
+//             >
+//               <h3 className="text-lg font-bold mb-2">
+//                 {confirmModal.type === "delete"
+//                   ? "Delete Participant?"
+//                   : confirmModal.participant.accountStatus === "blocked"
+//                   ? "Unblock Participant?"
+//                   : "Block Participant?"}
+//               </h3>
+//               <p className="text-sm text-gray-400 mb-5">
+//                 {confirmModal.type === "delete"
+//                   ? `Permanently delete "${confirmModal.participant.name}"? This cannot be undone.`
+//                   : confirmModal.participant.accountStatus === "blocked"
+//                   ? `Unblock "${confirmModal.participant.name}"? They will regain access.`
+//                   : `Block "${confirmModal.participant.name}"? They won't be able to log in.`}
+//               </p>
+//               <div className="flex gap-3">
+//                 <button
+//                   onClick={() => setConfirmModal(null)}
+//                   className={`flex-1 py-2 rounded-xl text-sm font-medium border ${isDark ? "border-gray-700 text-gray-300 hover:bg-gray-800" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}
+//                 >
+//                   Cancel
+//                 </button>
+//                 <button
+//                   onClick={() =>
+//                     confirmModal.type === "delete"
+//                       ? handleDelete(confirmModal.participant)
+//                       : handleBlock(confirmModal.participant)
+//                   }
+//                   className={`flex-1 py-2 rounded-xl text-sm font-semibold text-white ${confirmModal.type === "delete" ? "bg-red-500 hover:bg-red-600" : "bg-yellow-500 hover:bg-yellow-600"}`}
+//                 >
+//                   Confirm
+//                 </button>
+//               </div>
+//             </motion.div>
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
+//     </div>
+//   );
+// }
+
+
+
+import React, { useEffect, useState, useContext } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+import { ThemeContext } from "../../context/ThemeContext";
+import { toast } from "react-hot-toast";
+import {
+  Trash2, ShieldOff, ShieldCheck, Loader2,
+  Users, Search, UserPlus, X, Eye, EyeOff,
+} from "lucide-react";
+
+const BASE_URL    = "http://localhost:3000";
+const VALID_SPORTS = ["Cricket", "Football", "Tennis", "Hockey"];
+const EMPTY_FORM   = { name: "", email: "", password: "", sportsPreferences: [] };
+
+export default function ManageParticipants() {
+  const [participants, setParticipants] = useState([]);
+  const [loading, setLoading]           = useState(true);
+  const [actionId, setActionId]         = useState(null);
+  const [search, setSearch]             = useState("");
+  const [confirmModal, setConfirmModal] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [form, setForm]                 = useState(EMPTY_FORM);
+  const [formErrors, setFormErrors]     = useState({});
+  const [submitting, setSubmitting]     = useState(false);
+  const [showPass, setShowPass]         = useState(false);
+
+  const { themeMode } = useContext(ThemeContext);
+  const isDark = themeMode === "dark";
+
+  const token      = localStorage.getItem("token");
+  const authHeader = { headers: { Authorization: `Bearer ${token}` } };
+
+  // ── fetch ────────────────────────────────────────────────
+  const fetchParticipants = async () => {
+    try {
+      setLoading(true);
+      const res  = await axios.get(`${BASE_URL}/admin/participants`, authHeader);
+      const data = res.data?.data ?? res.data ?? [];
+      setParticipants(Array.isArray(data) ? data : []);
+    } catch {
+      toast.error("Failed to fetch participants");
+      setParticipants([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchParticipants(); }, []);
+
+  // ── sport checkbox toggle ─────────────────────────────────
+  const toggleSport = (sport) => {
+    const current = form.sportsPreferences;
+    if (current.includes(sport)) {
+      setForm({ ...form, sportsPreferences: current.filter((s) => s !== sport) });
+    } else if (current.length < 2) {
+      setForm({ ...form, sportsPreferences: [...current, sport] });
+    } else {
+      toast.error("Maximum 2 sports allowed");
+    }
+    setFormErrors({ ...formErrors, sportsPreferences: "" });
+  };
+
+  // ── add participant ───────────────────────────────────────
+  const validateForm = () => {
+    const errs = {};
+    if (!form.name.trim())  errs.name     = "Name is required";
+    if (!form.email.trim()) errs.email    = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(form.email)) errs.email = "Invalid email";
+    if (!form.password)     errs.password = "Password is required";
+    else if (form.password.length < 6) errs.password = "Min 6 characters";
+    if (form.sportsPreferences.length === 0) errs.sportsPreferences = "Select at least one sport";
+    return errs;
+  };
+
+  const handleAddParticipant = async () => {
+    const errs = validateForm();
+    if (Object.keys(errs).length) { setFormErrors(errs); return; }
+    setSubmitting(true);
+    try {
+      const res     = await axios.post(`${BASE_URL}/admin/participants`, form, authHeader);
+      const created = res.data?.data;
+      if (created) setParticipants((prev) => [created, ...prev]);
+      toast.success("Participant added successfully!");
+      closeAddModal();
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Failed to add participant");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const closeAddModal = () => {
+    setShowAddModal(false);
+    setForm(EMPTY_FORM);
+    setFormErrors({});
+    setShowPass(false);
+  };
+
+  // ── block ────────────────────────────────────────────────
+  const handleBlock = async (participant) => {
+    setConfirmModal(null);
+    setActionId(participant._id);
+    try {
+      const res     = await axios.patch(`${BASE_URL}/admin/participants/${participant._id}/block`, {}, authHeader);
+      const updated = res.data?.data;
+      if (updated) setParticipants((prev) => prev.map((p) => p._id === participant._id ? updated : p));
+      toast.success(updated?.accountStatus === "blocked" ? "Participant blocked" : "Participant unblocked");
+    } catch { toast.error("Action failed"); }
+    finally   { setActionId(null); }
+  };
+
+  // ── delete ───────────────────────────────────────────────
+  const handleDelete = async (participant) => {
+    setConfirmModal(null);
+    setActionId(participant._id);
+    try {
+      await axios.delete(`${BASE_URL}/admin/participants/${participant._id}`, authHeader);
+      setParticipants((prev) => prev.filter((p) => p._id !== participant._id));
+      toast.success("Participant deleted");
+    } catch { toast.error("Delete failed"); }
+    finally { setActionId(null); }
+  };
+
+  const filtered = participants.filter((p) =>
+    (p.name + p.email).toLowerCase().includes(search.toLowerCase())
+  );
+
+  // ── theme helpers ────────────────────────────────────────
+  const card      = isDark ? "bg-gray-900/70 border-gray-800 text-gray-100" : "bg-white/80 border-gray-200 text-gray-800";
+  const inputCls  = isDark ? "bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-500" : "bg-gray-50 border-gray-300 text-gray-800 placeholder-gray-400";
+  const rowHover  = isDark ? "hover:bg-gray-800/60" : "hover:bg-emerald-50/60";
+  const modalBg   = isDark ? "bg-gray-900 border-gray-700 text-white" : "bg-white border-gray-200 text-gray-800";
+  const labelCls  = isDark ? "text-gray-300" : "text-gray-600";
+  const fieldCls  = `w-full px-3 py-2 rounded-xl border text-sm outline-none transition-colors ${inputCls}`;
+  const badge     = (s) => s === "blocked"
+    ? "bg-red-500/20 text-red-400 border border-red-500/30"
+    : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+  const approvalBadge = (approved) => approved
+    ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+    : "bg-orange-500/20 text-orange-400 border border-orange-500/30";
+
+  return (
+    <div className="space-y-6">
+
+      {/* ── Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <Users className="w-7 h-7 text-emerald-500" />
+          <h2 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+            Manage Participants
+          </h2>
+          <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400">
+            {participants.length}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${inputCls}`}>
+            <Search className="w-4 h-4 text-gray-400 shrink-0" />
+            <input
+              className="bg-transparent outline-none text-sm w-40"
+              placeholder="Search participants..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold transition-colors shadow"
+          >
+            <UserPlus className="w-4 h-4" />
+            Add Participant
+          </button>
+        </div>
+      </div>
+
+      {/* ── Table ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={`rounded-2xl border shadow-lg overflow-hidden ${card}`}
+      >
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+          </div>
+        ) : filtered.length === 0 ? (
+          <p className="text-center py-16 text-gray-400">No participants found.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className={`text-xs uppercase tracking-wider ${isDark ? "bg-gray-800/80 text-gray-400" : "bg-gray-100 text-gray-500"}`}>
+                  <th className="px-5 py-3 text-left">#</th>
+                  <th className="px-5 py-3 text-left">Name</th>
+                  <th className="px-5 py-3 text-left">Email</th>
+                  <th className="px-5 py-3 text-left">Sports</th>
+                  <th className="px-5 py-3 text-left">Approved</th>
+                  <th className="px-5 py-3 text-left">Status</th>
+                  <th className="px-5 py-3 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-700/20">
+                {filtered.map((p, idx) => (
+                  <tr key={p._id} className={`transition-colors ${rowHover}`}>
+                    <td className="px-5 py-3 text-gray-400">{idx + 1}</td>
+                    <td className="px-5 py-3 font-medium">{p.name}</td>
+                    <td className="px-5 py-3 text-gray-400">{p.email}</td>
+                    <td className="px-5 py-3 text-gray-400 text-xs">
+                      {Array.isArray(p.sportsPreferences) && p.sportsPreferences.length
+                        ? p.sportsPreferences.join(", ")
+                        : "—"}
+                    </td>
+                    <td className="px-5 py-3">
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${approvalBadge(p.approved)}`}>
+                        {p.approved ? "Approved" : "Pending"}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3">
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${badge(p.accountStatus)}`}>
+                        {p.accountStatus === "blocked" ? "Blocked" : "Active"}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => setConfirmModal({ type: "block", participant: p })}
+                          disabled={actionId === p._id}
+                          title={p.accountStatus === "blocked" ? "Unblock" : "Block"}
+                          className={`p-2 rounded-lg transition-colors ${
+                            p.accountStatus === "blocked"
+                              ? "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
+                              : "bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30"
+                          }`}
+                        >
+                          {actionId === p._id
+                            ? <Loader2 className="w-4 h-4 animate-spin" />
+                            : p.accountStatus === "blocked"
+                              ? <ShieldCheck className="w-4 h-4" />
+                              : <ShieldOff className="w-4 h-4" />
+                          }
+                        </button>
+                        <button
+                          onClick={() => setConfirmModal({ type: "delete", participant: p })}
+                          disabled={actionId === p._id}
+                          title="Delete"
+                          className="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </motion.div>
+
+      {/* ── Add Participant Modal ── */}
+      <AnimatePresence>
+        {showAddModal && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+              className={`rounded-2xl p-6 w-full max-w-md shadow-2xl border ${modalBg}`}
+            >
+              {/* header */}
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2">
+                  <UserPlus className="w-5 h-5 text-emerald-500" />
+                  <h3 className="text-lg font-bold">Add New Participant</h3>
+                </div>
+                <button onClick={closeAddModal} className="p-1 rounded-lg hover:bg-gray-700/30">
+                  <X className="w-5 h-5 text-gray-400" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {/* Name */}
+                <div>
+                  <label className={`block text-xs font-medium mb-1 ${labelCls}`}>Full Name</label>
+                  <input
+                    className={`${fieldCls} ${formErrors.name ? "border-red-500" : ""}`}
+                    placeholder="Ali Hassan"
+                    value={form.name}
+                    onChange={(e) => { setForm({ ...form, name: e.target.value }); setFormErrors({ ...formErrors, name: "" }); }}
+                  />
+                  {formErrors.name && <p className="text-red-400 text-xs mt-1">{formErrors.name}</p>}
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className={`block text-xs font-medium mb-1 ${labelCls}`}>Email</label>
+                  <input
+                    type="email"
+                    className={`${fieldCls} ${formErrors.email ? "border-red-500" : ""}`}
+                    placeholder="participant@example.com"
+                    value={form.email}
+                    onChange={(e) => { setForm({ ...form, email: e.target.value }); setFormErrors({ ...formErrors, email: "" }); }}
+                  />
+                  {formErrors.email && <p className="text-red-400 text-xs mt-1">{formErrors.email}</p>}
+                </div>
+
+                {/* Password */}
+                <div>
+                  <label className={`block text-xs font-medium mb-1 ${labelCls}`}>Password</label>
+                  <div className="relative">
+                    <input
+                      type={showPass ? "text" : "password"}
+                      className={`${fieldCls} pr-10 ${formErrors.password ? "border-red-500" : ""}`}
+                      placeholder="Min 6 characters"
+                      value={form.password}
+                      onChange={(e) => { setForm({ ...form, password: e.target.value }); setFormErrors({ ...formErrors, password: "" }); }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPass(!showPass)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                    >
+                      {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  {formErrors.password && <p className="text-red-400 text-xs mt-1">{formErrors.password}</p>}
+                </div>
+
+                {/* Sports Preferences */}
+                <div>
+                  <label className={`block text-xs font-medium mb-2 ${labelCls}`}>
+                    Sports Preferences
+                    <span className="ml-1 text-gray-500">(select 1–2)</span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {VALID_SPORTS.map((sport) => {
+                      const selected = form.sportsPreferences.includes(sport);
+                      return (
+                        <button
+                          key={sport}
+                          type="button"
+                          onClick={() => toggleSport(sport)}
+                          className={`px-3 py-2 rounded-xl text-sm font-medium border transition-all ${
+                            selected
+                              ? "bg-emerald-500 border-emerald-500 text-white"
+                              : isDark
+                                ? "bg-gray-800 border-gray-700 text-gray-300 hover:border-emerald-500"
+                                : "bg-gray-50 border-gray-200 text-gray-600 hover:border-emerald-400"
+                          }`}
+                        >
+                          {sport}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {formErrors.sportsPreferences && (
+                    <p className="text-red-400 text-xs mt-1">{formErrors.sportsPreferences}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* actions */}
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={closeAddModal}
+                  className={`flex-1 py-2 rounded-xl text-sm font-medium border ${isDark ? "border-gray-700 text-gray-300 hover:bg-gray-800" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddParticipant}
+                  disabled={submitting}
+                  className="flex-1 py-2 rounded-xl text-sm font-semibold bg-emerald-500 hover:bg-emerald-600 text-white transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                >
+                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
+                  {submitting ? "Adding..." : "Add Participant"}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Confirm Modal ── */}
+      <AnimatePresence>
+        {confirmModal && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+              className={`rounded-2xl p-6 w-80 shadow-2xl border ${modalBg}`}
+            >
+              <h3 className="text-lg font-bold mb-2">
+                {confirmModal.type === "delete"
+                  ? "Delete Participant?"
+                  : confirmModal.participant.accountStatus === "blocked" ? "Unblock Participant?" : "Block Participant?"}
+              </h3>
+              <p className="text-sm text-gray-400 mb-5">
+                {confirmModal.type === "delete"
+                  ? `Permanently delete "${confirmModal.participant.name}"? This cannot be undone.`
+                  : confirmModal.participant.accountStatus === "blocked"
+                    ? `Unblock "${confirmModal.participant.name}"? They will regain access.`
+                    : `Block "${confirmModal.participant.name}"? They won't be able to log in.`}
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setConfirmModal(null)}
+                  className={`flex-1 py-2 rounded-xl text-sm font-medium border ${isDark ? "border-gray-700 text-gray-300 hover:bg-gray-800" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => confirmModal.type === "delete" ? handleDelete(confirmModal.participant) : handleBlock(confirmModal.participant)}
+                  className={`flex-1 py-2 rounded-xl text-sm font-semibold text-white ${confirmModal.type === "delete" ? "bg-red-500 hover:bg-red-600" : "bg-yellow-500 hover:bg-yellow-600"}`}
+                >
+                  Confirm
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+    </div>
+  );
+}

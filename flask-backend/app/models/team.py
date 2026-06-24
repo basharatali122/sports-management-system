@@ -40,3 +40,17 @@ class Team:
     def delete_by_id(cls, id):
         collection = cls.get_collection()
         return collection.delete_one({'_id': ObjectId(id)})
+    
+
+
+
+
+
+
+
+
+
+
+
+
+    
