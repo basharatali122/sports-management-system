@@ -119,7 +119,42 @@ export default function RegisterForEvent() {
   }, [searchQuery, category, sortNewest, events]);
 
   // ✅ Register Handler
-  const handleRegister = async (eventId) => {
+//   const handleRegister = async (eventId) => {
+//   try {
+//     setRegistering(eventId);
+
+//     const res = await axios.post(
+//       `http://localhost:3000/events/${eventId}/register`,
+//       { userId: user._id },
+//       { headers: { Authorization: `Bearer ${token}` } }
+//     );
+
+//     if (res.data.success) {
+//       // ✅ Optimistic UI update
+//       setEvents((prev) =>
+//         prev.map((ev) =>
+//           ev._id === eventId
+//             ? { ...ev, participants: [...(ev.participants || []), user._id] }
+//             : ev
+//         )
+//       );
+//     }
+
+//     alert(res.data.msg);
+//   } catch (err) {
+//     if (err.response?.data?.msg === "Already registered") {
+//       alert("⚠️ You are already registered for this event.");
+//     } else {
+//       alert(err.response?.data?.msg || "Error registering for event.");
+//     }
+//   } finally {
+//     setRegistering(null);
+//   }
+// };
+
+
+// ✅ Fixed Register Handler
+const handleRegister = async (eventId) => {
   try {
     setRegistering(eventId);
 
@@ -129,7 +164,8 @@ export default function RegisterForEvent() {
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    if (res.data.success) {
+    // ✅ Check if response has status 201 (success)
+    if (res.data.status === 201 || res.status === 201) {
       // ✅ Optimistic UI update
       setEvents((prev) =>
         prev.map((ev) =>
@@ -138,20 +174,33 @@ export default function RegisterForEvent() {
             : ev
         )
       );
-    }
-
-    alert(res.data.msg);
-  } catch (err) {
-    if (err.response?.data?.msg === "Already registered") {
-      alert("⚠️ You are already registered for this event.");
+      
+      // ✅ Show success message from backend
+      toast.success(res.data.message || "Registered successfully!");
+      // Or use alert if you prefer:
+      // alert(res.data.message || "Registered successfully!");
     } else {
-      alert(err.response?.data?.msg || "Error registering for event.");
+      throw new Error(res.data.message || "Registration failed");
+    }
+    
+  } catch (err) {
+    console.error("Registration error:", err);
+    
+    // Handle different error cases
+    if (err.response?.data?.message === "Already registered") {
+      toast.error("You are already registered for this event.");
+      // alert("⚠️ You are already registered for this event.");
+    } else if (err.response?.data?.message) {
+      toast.error(err.response.data.message);
+      // alert(err.response.data.message);
+    } else {
+      toast.error("Error registering for event. Please try again.");
+      // alert("Error registering for event.");
     }
   } finally {
     setRegistering(null);
   }
 };
-
 
   // ✅ Loading Screen
   if (loading)

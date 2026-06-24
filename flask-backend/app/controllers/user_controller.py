@@ -182,6 +182,24 @@ def create_user():
                     error="Coaches must select a valid sport (Cricket, Football, Tennis, Hockey)",
                     status_code=400
                 )
+        
+        existing_coach = User.find_one({
+
+            'role':'coach',
+            'sport':sport,
+            'status':"approved"
+
+
+
+        })
+
+        if existing_coach:
+            return response_handler(
+                error=f"A coach for {sport} already exist ",
+                status_code=409
+            )
+            
+
 
         # -------- PARTICIPANT VALIDATION --------
         if role == 'participant':
