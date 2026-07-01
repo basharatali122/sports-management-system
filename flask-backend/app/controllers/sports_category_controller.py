@@ -74,34 +74,6 @@ def assign_organizer(category_id):
 
 
 # ---------------- GET ALL CATEGORIES ----------------
-# def get_categories():
-#     try:
-#         categories = SportsCategory.find()
-
-#         formatted = []
-
-#         for cat in categories:
-
-#             formatted_cat = {
-#                 "_id": str(cat["_id"]),
-#                 "name": cat.get("name"),
-#                 "organizer": None
-#             }
-
-#             if cat.get("organizer"):
-#                 formatted_cat["organizer"] = str(cat["organizer"])
-
-#             formatted.append(formatted_cat)
-
-#         return response_handler(
-#             data={"categories": formatted},
-#             message="Categories fetched successfully"
-#         )
-
-#     except Exception as e:
-#         return response_handler(error=f"Server Error: {str(e)}", status_code=500)
-
-
 
 def get_categories():
     try:

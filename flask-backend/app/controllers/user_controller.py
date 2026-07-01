@@ -45,97 +45,6 @@ def get_all_users():
         print(f"Error fetching users: {e}")
         return response_handler(error="Server error while fetching users", status_code=500)
 
-# def create_user():
-#     try:
-#         data = request.get_json()
-#         name = data.get('name')
-#         email = data.get('email', '').strip().lower()
-#         password = data.get('password')
-#         role = data.get('role', 'participant')
-#         sport = data.get('sport')
-        
-#         # Basic validation
-#         if not name or not email or not password:
-#             return response_handler(
-#                 error="Name, email, and password are required",
-#                 status_code=400
-#             )
-        
-#         # Check if user exists
-#         existing_user = User.find_one({'email': email})
-#         if existing_user:
-#             return response_handler(
-#                 error="User with this email already exists",
-#                 status_code=409
-#             )
-        
-#         # Prevent multiple admins
-#         if role == 'admin':
-#             admin_exists = User.find_one({'role': 'admin'})
-#             if admin_exists:
-#                 return response_handler(
-#                     error="An admin account already exists",
-#                     status_code=400
-#                 )
-        
-#         # Coach-specific validation
-#         valid_sports = ['Cricket', 'Football', 'Tennis', 'Hockey']
-#         if role == 'coach':
-#             if not sport or sport not in valid_sports:
-#                 return response_handler(
-#                     error="Coaches must select a valid sport (Cricket, Football, Tennis, Hockey)",
-#                     status_code=400
-#                 )
-        
-#         # 🔥 FIXED: Handle password hashing properly
-#         # Check if password is already bytes, if not, encode it
-#         if isinstance(password, bytes):
-#             password_bytes = password
-#         else:
-#             password_bytes = password.encode('utf-8')
-        
-#         # Hash the password
-#         hashed_password = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
-        
-#         # Create user
-#         user_data = {
-#             'name': name,
-#             'email': email,
-#             'password': hashed_password,  # Store as bytes (MongoDB can handle this)
-#             'role': role,
-#             'accountStatus': 'active',
-#             'created_at': datetime.utcnow()
-#         }
-        
-#         # Set approval status based on role
-#         if role == 'coach':
-#             user_data['sport'] = sport
-#             user_data['approved'] = False
-#             user_data['approvalStatus'] = 'pending-coach'
-#         else:
-#             user_data['approved'] = True
-#             user_data['approvalStatus'] = 'approved'
-        
-#         user_id = User.create(user_data)
-        
-#         # Get created user
-#         new_user = User.find_by_id(user_id)
-#         if new_user and 'password' in new_user:
-#             del new_user['password']
-#         new_user['_id'] = str(new_user['_id'])
-        
-#         return response_handler(
-#             data=new_user,
-#             status_code=201,
-#             message="User created successfully"
-#         )
-        
-#     except Exception as e:
-#         print(f"Error creating user: {e}")
-#         import traceback
-#         traceback.print_exc()
-#         return response_handler(error="Internal server error", status_code=500)
-
 
 def create_user():
     try:
@@ -483,35 +392,6 @@ def get_organizers():
     except Exception as e:
         print(f"Error in get_organizers: {e}")
         return response_handler(error="Server error", status_code=500)
-
-# def approve_user(user_id):
-#     try:
-#         # Validate ObjectId
-#         if not ObjectId.is_valid(user_id):
-#             return response_handler(error="Invalid user ID format", status_code=400)
-            
-#         result = User.update_by_id(user_id, {
-#             'status': 'approved',
-#             'approved': True,
-#             'approvalStatus': 'approved'
-#         })
-        
-#         if result.matched_count == 0:
-#             return response_handler(error="User not found", status_code=404)
-        
-#         updated_user = User.find_by_id(user_id)
-#         if updated_user and 'password' in updated_user:
-#             del updated_user['password']
-#         updated_user['_id'] = str(updated_user['_id'])
-        
-#         return response_handler(
-#             data=updated_user,
-#             message="User approved successfully"
-#         )
-        
-#     except Exception as e:
-#         print(f"Error in approve_user: {e}")
-#         return response_handler(error="Internal server error", status_code=500)
 
 def approve_user(user_id):
     try:

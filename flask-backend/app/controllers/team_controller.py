@@ -97,23 +97,6 @@ def create_team():
         )
 
 
-# def get_pending_teams():
-#     try:
-#         teams = Team.find({'approved': False})
-
-#         formatted = []
-#         for team in teams:
-#             team['_id'] = str(team['_id'])
-#             formatted.append(team)
-
-#         return response_handler(data=formatted)
-
-#     except Exception as e:
-#         return response_handler(
-#             error=f"Error fetching pending teams: {str(e)}",
-#             status_code=500
-#         )
-
 
 def get_pending_teams():
     try:
@@ -147,23 +130,6 @@ def get_pending_teams():
         )
 
 
-
-# def get_approved_teams():
-#     try:
-#         teams = Team.find({'approved': True})
-
-#         formatted = []
-#         for team in teams:
-#             team['_id'] = str(team['_id'])
-#             formatted.append(team)
-
-#         return response_handler(data=formatted)
-
-#     except Exception as e:
-#         return response_handler(
-#             error=f"Error fetching approved teams: {str(e)}",
-#             status_code=500
-#         )
 
 
 def get_approved_teams():

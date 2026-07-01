@@ -21,28 +21,6 @@ def convert_objectid(data):
 # =========================
 # GET MY PROFILE
 # =========================
-# def get_my_profile():
-#     try:
-#         user_id = get_jwt_identity()
-
-#         print("User ID from JWT:", user_id)
-
-#         profile = Profile.find_by_user(user_id)
-
-#         if not profile:
-#             return response_handler(
-#                 message="Profile not found",
-#                 data={}
-#             )
-
-#         profile = convert_objectid(profile)
-
-#         return response_handler(data=profile)
-
-#     except Exception as e:
-#         return response_handler(error=str(e), status_code=500)
-
-
 
 
 def get_my_profile():

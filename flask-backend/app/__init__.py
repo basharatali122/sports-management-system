@@ -90,6 +90,7 @@ from flask_socketio import SocketIO
 import os
 from dotenv import load_dotenv
 
+
 # Load environment variables
 load_dotenv()
 
@@ -137,6 +138,7 @@ def create_app():
     from app.routes.product_routes import product_bp
     from app.routes.cart_routes import cart_bp
     from app.routes.order_routes import order_bp
+    from app.routes.coach_routes import coach_bp
     
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(user_bp, url_prefix='/users')
@@ -150,7 +152,7 @@ def create_app():
     app.register_blueprint(product_bp, url_prefix='/products')
     app.register_blueprint(cart_bp, url_prefix='/cart')
     app.register_blueprint(order_bp, url_prefix='/orders')
-    
+    app.register_blueprint(coach_bp, url_prefix='/coach')
     # Initialize SocketIO with app
     socketio.init_app(app, cors_allowed_origins="*")  # Allow all for debugging
     
